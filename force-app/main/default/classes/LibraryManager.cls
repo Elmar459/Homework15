@@ -1,6 +1,6 @@
 
 public with sharing class LibraryManager {
-    public LibraryManager() {
+    public List<Account> updateDescription() {
         // Task 1. Create Records
         List<Account> accountList = new List<Account>();
         accountList.add(new Account(Name = 'ABB Ltd'));
@@ -10,19 +10,20 @@ public with sharing class LibraryManager {
         insert accountList;
 
         // Task 2. Query and Update
-        List<Account> accountList = [Select Name from Account];
+        accountList = [Select Name, Description from Account];
         for (Account acc: accountList) {
             acc.Description = 'Potential customer';
         }
-        update accountList;
-        
+                
         // Task 3. Error Handling
         try{
+            update accountList;
             DmlException ex = new DmlException('This is a custom error message');
             throw ex;
         }
         catch(DmlException ex) {
             System.debug('Error: ' + ex.getMessage());
         }
+        return accountList;
     }
 }
